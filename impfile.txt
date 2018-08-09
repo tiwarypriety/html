@@ -1,0 +1,218 @@
+***********************Base Entity**********************
+@Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+public class BaseEntity 
+{
+	@Id
+	@Column(name="CODE")
+    	private int eCode;
+	@Column(name="NAME")
+	private String eName;
+*********************************************Refresh page**************************************************
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>REFRESH</title>
+<script>
+window.setInterval(function() {
+    reloadIFrame()
+}, 10000);
+function reloadIFrame()
+{
+  document.getElementById('iframe').contentWindow.location.reload();
+ }
+ </script>
+</head> 
+<body >
+<div id="divtable2">
+<iframe id="iframe" src="/SpringBRD14/viewAll" height="700px" width="550px"></iframe>
+</div>
+</body>
+</html>
+***************************************************Password Hashing*************************************
+<beans:bean id="encoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<beans:constructor-arg name="strength" value="11" />
+	</beans:bean> 
+users-by-username-query=
+		    "select username,password,enabled from usershubhi where username=?"
+		  authorities-by-username-query=
+		    "select username,role from roleshubhi where username =?"/>  
+		    <password-encoder ref="encoder"/>
+**************************************************************************************************************
+**************************************Error Page*************************************
+filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+   </filter>
+   <filter-mapping>
+   <filter-name>springSecurityFilterChain</filter-name>
+   <url-pattern>/*</url-pattern>
+   </filter-mapping>
+  
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/errorHandler.jsp</location>
+  </error-page>
+***************************************************************************************************
+***********************************************FOr Exception***************************************
+<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+ <bean id="messagesource" class="org.springframework.context.support.ResourceBundleMessageSource">
+<property name="basenames">
+<list>
+<value>names</value>
+<value>log4j</value>
+</list>
+</property>
+</bean> 
+    
+    <bean class = "org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+      <property name = "exceptionMappings">
+         <props>
+            <prop key = "com.nucleus.SpringException">
+               ExceptionPage
+            </prop>
+         </props>
+      </property>
+      <property name = "defaultErrorView" value = "error"/>
+   </bean>
+*******************************************************************************************************
+*****************************************Authentication**********************************************
+<form-login login-page="/loginpage1" authentication-failure-url="/loginfailure" default-target-url="/default1" />
+***************************************************************************************************
+*****************************************LOG****************************************************
+# Log Levels
+log4j.rootLogger = INFO,CONSOLE,R,WARN,ERROR
+
+#Rolling File Appender
+log4j.appender.R = org.apache.log4j.RollingFileAppender
+
+#Appender Configuration
+log4j.appender.CONSOLE = org.apache.log4j.ConsoleAppender
+
+# Pattern to Output the Caller's File name and Line number 
+log4j.appender.CONSOLE.layout = org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%d - %c - %p - %m%n
+
+#Path and File name to store the log file
+log4j.appender.R.File = D:\\myLogsh.log
+log4j.appender.R.MaxFileSize = 200KB
+
+#Number of BackUp Files
+log4j.appender.R.MaxBackupIndex = 2
+
+#Layout for Rolling File Appender
+log4j.appender.R.layout = org.apache.log4j.PatternLayout
+log4j.appender.R.layout.ConversionPattern = %d - %c - %p - %m%n
+
+## Root logger option
+#log4j.rootLogger=DEBUG, file, stdout
+#
+## Direct log messages to a log file
+#log4j.appender.file=org.apache.log4j.RollingFileAppender
+#log4j.appender.file.File=logging.log
+#log4j.appender.file.MaxFileSize=10MB
+#log4j.appender.file.MaxBackupIndex=10
+#log4j.appender.file.layout=org.apache.log4j.PatternLayout
+#log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+#
+## Direct log messages to stdout
+#log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+#log4j.appender.stdout.Target=System.out
+#log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+#log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+**********************************************************************************************************
+******************************************Exception.jsp******************************************************
+<%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
+<html>
+   <head>
+      <title>Spring MVC Exception Handling</title>
+   </head>
+
+   <body>
+      <h2>Spring MVC Exception Handling</h2>
+      <h3>${exception.exceptionMsg}</h3>
+   </body>
+</html>
+**********************************************************************************************************
+*****************************************ErrorHandler.jsp*****************************************************************
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page isErrorPage="true" %>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>error Handler</title>
+</head>
+<body> 
+<br><br><br><br><br>
+<h1>Error Occured: <%= exception %></h1>
+</body>
+</html>
+****************************************************************************************************
+*******************************************Error.jsp*************************************************
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page isErrorPage="true" %>
+<html>
+   <head>
+      <title>Spring Error Page</title>
+   </head>
+
+   <body>
+      <p>An error occured, please Retry!!!.</p>
+   </body>
+</html>
+
+
+*************************************************************************************************
+********************************Update*********************************************************
+public void update(Customer customer)
+	{
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy hh:mm:ss");  
+		String date1 = dateFormat.format(date);		
+		customer.setModifiedDate(date1);
+		sessionFactory.getCurrentSession().update(customer);
+	}
+*************************************************************************************************
+********************************Delete*********************************************************	
+public int delete(int code) 
+	{
+		Customer customer=(Customer) sessionFactory.getCurrentSession().get(Customer.class,cCode);
+		sessionFactory.getCurrentSession().delete(customer);
+		return 1;
+	}
+*************************************************************************************************
+********************************viewall*********************************************************
+@Transactional
+public List<Customer> viewAll()
+	{
+		Query query=sessionFactory.getCurrentSession().createQuery("from Customer");
+		List<Customer> list=query.list();
+		return list;
+	}
+*******************************************************************************************************
+*********************************************SpringExcetion.java*****************************************
+public class SpringException extends RuntimeException
+{
+	
+		 private String exceptionMsg;
+		   
+		   public SpringException(String exceptionMsg) 
+		   {
+		      this.exceptionMsg = exceptionMsg;
+		   }
+		   public String getExceptionMsg()
+		   {
+		      return this.exceptionMsg;
+		   }
+		   public void setExceptionMsg(String exceptionMsg)
+		   {
+		      this.exceptionMsg = exceptionMsg;
+		   }
+	
+}
