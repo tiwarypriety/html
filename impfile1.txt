@@ -1,0 +1,44 @@
+****************************Base Entity**********************
+@Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+public class BaseEntity 
+{
+	@Id
+	@Column(name="CODE")
+    private int eCode;
+	@Column(name="NAME")
+	private String eName;
+	@Column(name="EMail")
+	@Email
+*****************************************************************
+***************************Logger*****************************
+********on top   -------------------------->final static Logger logger=Logger.getLogger(com.nucleus.Controller.CustomerController.class);
+------------->PropertyConfigurator.configure("log4j.properties");
+try
+	   {
+	   if(bindingResult.hasErrors())
+	   {
+		   return new ModelAndView(messagesource.getMessage("b",null,"Not Found",null));
+	   } 
+	   Boolean b=serviceclass.insert(customer,name);
+	   if(b == true)
+	   {
+		   return new ModelAndView(messagesource.getMessage("c",null,"Not Found",null),"message","Successfully Inserted");   
+	   }
+	  }
+	   catch(Exception e)
+	   {
+		   logger.warn("Exception occured while INSERTING");
+		   logger.error(e);
+	   }
+	return new ModelAndView(messagesource.getMessage("o",null,"Not Found",null));
+	
+} 
+catch(Exception e)
+	   {
+		   logger.warn("Exception occured while FETCHING DETAILS");
+		   logger.error(e);
+	   }
+******************************************************************
+************************main to service (encryption)*************************************
+*****************************************************************************************888
